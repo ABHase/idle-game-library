@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Game Mechanics Library Test</title>
+
+    <!-- Include your JavaScript files -->
+    <script type="module" src="dist/Reward.js"></script>
+    <script type="module" src="dist/GameModifier.js"></script>
+    <script type="module" src="dist/GameAction.js"></script>
+
+    <script type="module" src="dist/Punishment.js"></script>
+    <script type="module" src="dist/GameLoop.js"></script>
+    <script type="module" src="test-script.js"></script>
+    <script type="module" src="test-script.js" defer></script>
+    <style>
+      /* Add some basic styling */
+      .button {
+        margin: 5px;
+      }
+      .display {
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="fixed-ratio-btn">Fixed Ratio Button</button>
+    <div id="fixed-ratio-display" class="display"></div>
+
+    <button id="variable-ratio-btn">Variable Ratio Button</button>
+    <div id="variable-ratio-display" class="display"></div>
+
+    <button id="fixed-interval-btn">Fixed Interval Button</button>
+    <div id="fixed-interval-display" class="display"></div>
+
+    <button id="variable-interval-btn">Variable Interval Button</button>
+    <div id="variable-interval-display" class="display"></div>
+  </body>
+</html>
