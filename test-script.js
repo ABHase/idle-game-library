@@ -53,6 +53,11 @@ document.addEventListener("DOMContentLoaded", () => {
       action.execute(deltaTime);
     }
 
+    // Execute all auto-crafter-crafter-crafter actions
+    for (let action of gameState.autoCrafterCrafterCrafterActions) {
+      action.execute(deltaTime);
+    }
+
     // Update displays
     updateAutoCrafterDisplay(); // Update the auto crafter display
     updateAutoCrafterCrafterDisplay(); // Update the auto crafter crafter display
