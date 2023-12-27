@@ -1,2 +1,1 @@
-// GameModifier.ts
 export {};

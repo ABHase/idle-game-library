@@ -5,11 +5,15 @@
     <title>Game Mechanics Library Test</title>
 
     <!-- Include your JavaScript files -->
+
     <script type="module" src="dist/Reward.js"></script>
     <script type="module" src="dist/GameModifier.js"></script>
     <script type="module" src="dist/GameAction.js"></script>
-
+    <script type="module" src="dist/GameActionsComposite.js"></script>
+    <script type="module" src="dist/GameModifier.js"></script>
+    <script type="module" src="dist/GameModifierComposite.js"></script>
     <script type="module" src="dist/Punishment.js"></script>
+    <script type="module" src="dist/PunishmentPrecondition.js"></script>
     <script type="module" src="dist/GameLoop.js"></script>
     <script type="module" src="test-script.js"></script>
     <script type="module" src="test-script.js" defer></script>
@@ -24,6 +28,10 @@
     </style>
   </head>
   <body>
+    <div id="points-display" class="display">Points: 0</div>
+    <div id="threshold-display" class="display">Threshold: 50 points</div>
+    <div id="punishment-display" class="display"></div>
+
     <button id="fixed-ratio-btn">Fixed Ratio Button</button>
     <div id="fixed-ratio-display" class="display"></div>
 
@@ -35,5 +43,14 @@
 
     <button id="variable-interval-btn">Variable Interval Button</button>
     <div id="variable-interval-display" class="display"></div>
+
+    <button id="punishment-btn">Reset Punishment Timer</button>
+    <div id="punishment-display" class="display"></div>
+
+    <button id="execute-actions-btn">Execute Actions</button>
+    <div id="execute-actions-display" class="display"></div>
+
+    <button id="trigger-modifier-btn">Activate Double Points</button>
+    <div id="trigger-modifier-display" class="display"></div>
   </body>
 </html>
