@@ -1,0 +1,76 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Page Styling */
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background-color: #f4f4f4;
+  padding: 20px;
+  color: #333;
+  font-size: 14px; /* Smaller font size for sleeker look */
+}
+
+/* Display Classes */
+.display {
+  background-color: #fff;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85em; /* Adjust font size */
+}
+
+/* Button Styling */
+button {
+  background-color: #0a3b6f;
+  color: #fff;
+  border: none;
+  padding: 6px 15px;
+  margin: 5px;
+  border-radius: 15px; /* Smaller radius for buttons */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  outline: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  font-size: 0.85em; /* Adjust font size */
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button:active {
+  background-color: #003d82;
+}
+
+/* Extra Classes for Specific Elements */
+#points-display,
+#auto-crafter-count,
+#auto-crafter-crafter-count,
+#auto-crafter-crafter-crafter-count {
+  font-weight: bold;
+}
+
+#threshold-display,
+#punishment-display {
+  font-style: italic;
+}
+
+/* Layout adjustments for smaller screen sizes */
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+
+  .display,
+  button {
+    font-size: 0.75em; /* Smaller font size for mobile */
+  }
+}

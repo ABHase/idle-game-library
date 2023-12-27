@@ -49,21 +49,24 @@ document.addEventListener("DOMContentLoaded", () => {
     autoCraftAction.execute(deltaTime);
 
     // Execute all auto-crafter-crafter actions
-    for (let action of gameState.autoCrafterCrafterActions) {
+    gameState.autoCrafterCrafterActions.forEach((action, index) => {
+      console.log(`Executing autoCrafterCrafterAction at index ${index}`);
       action.execute(deltaTime);
-    }
+    });
 
     // Execute all auto-crafter-crafter-crafter actions
-    for (let action of gameState.autoCrafterCrafterCrafterActions) {
+    gameState.autoCrafterCrafterCrafterActions.forEach((action, index) => {
+      console.log(
+        `Executing autoCrafterCrafterCrafterAction at index ${index}`
+      );
       action.execute(deltaTime);
-    }
+    });
 
     // Update displays
-    updateAutoCrafterDisplay(); // Update the auto crafter display
-    updateAutoCrafterCrafterDisplay(); // Update the auto crafter crafter display
-    // In your game loop callback
-    updateAutoCrafterCrafterCrafterDisplay(); // Update the AutoCrafter-Crafter-Crafter display
-    updatePointsDisplay(); // Update points display
+    updateAutoCrafterDisplay();
+    updateAutoCrafterCrafterDisplay();
+    updateAutoCrafterCrafterCrafterDisplay();
+    updatePointsDisplay();
   });
 
   // Display for auto crafters
@@ -459,7 +462,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     execute(deltaTime) {
+      console.log(
+        `AutoCrafterCrafterAction - Before incrementing, Elapsed Time: ${this.elapsedTime}`
+      );
       this.elapsedTime += deltaTime;
+      console.log(
+        `AutoCrafterCrafterAction - After incrementing, Elapsed Time: ${this.elapsedTime}`
+      );
+
       if (this.elapsedTime >= this.interval) {
         this.elapsedTime = 0;
         gameState.autoCrafters++; // Increment auto-crafters
@@ -495,6 +505,9 @@ document.addEventListener("DOMContentLoaded", () => {
     .getElementById("purchase-auto-crafter-crafter-btn")
     .addEventListener("click", () => {
       purchaseAutoCrafterCrafter.execute();
+      console.log(
+        `Actions count after purchase: ${gameState.autoCrafterCrafterActions.length}`
+      );
     });
 
   class DeductPointsAction {
