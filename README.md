@@ -22,7 +22,9 @@ Example of how to include this library in your project, simply clone the reposit
 Repeat the import statement for each class you need from the library.
 
 **Usage**
+
 **Game Loop**
+
 The `GameLoop` class runs the game update cycle. Use it to
 register update callbacks that define the game's behavior:
 
