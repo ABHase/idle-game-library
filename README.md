@@ -15,15 +15,21 @@ This JavaScript library is designed to simplify the development of idle or incre
 
 Example of how to include this library in your project, simply clone the repository or download the files and import them into your HTML or JavaScript modules:
 
-````html
+```html
 <script type="module" src="path/to/GameLoop.js"></script>
+```
 
-Repeat the import statement for each class you need from the library. **Usage**
-**Game Loop** The `GameLoop` class runs the game update cycle. Use it to
-register update callbacks that define the game's behavior: ```javascript const
+Repeat the import statement for each class you need from the library.
+
+**Usage**
+**Game Loop**
+The `GameLoop` class runs the game update cycle. Use it to
+register update callbacks that define the game's behavior:
+
+```javascript const
 gameLoop = new GameLoop(); gameLoop.start(200); // Starts the loop with a tick
 every 200 milliseconds
-````
+```
 
 **Actions and Modifiers**
 
