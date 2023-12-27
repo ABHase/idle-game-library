@@ -27,38 +27,93 @@ document.addEventListener("DOMContentLoaded", () => {
     "variable-interval-display"
   );
 
+  const gameLoop = new GameLoop();
+  gameLoop.start(200); // 1 second interval
+
+  // Example of how to do it with a gameState object
+  const gameState = {
+    points: 0,
+    autoCrafters: 0,
+    autoCrafterCrafters: 0,
+    autoCrafterCrafterActions: [],
+    doublePointsActive: false,
+    autoCrafterCrafterCrafters: 0,
+    autoCrafterCrafterCrafterActions: [],
+  };
+
+  // Register auto-crafting in the game loop
+  gameLoop.registerUpdateCallback(() => {
+    const deltaTime = 200; // 200 milliseconds per game loop tick
+
+    // Execute auto-crafting
+    autoCraftAction.execute(deltaTime);
+
+    // Execute all auto-crafter-crafter actions
+    for (let action of gameState.autoCrafterCrafterActions) {
+      action.execute(deltaTime);
+    }
+
+    // Update displays
+    updateAutoCrafterDisplay(); // Update the auto crafter display
+    updateAutoCrafterCrafterDisplay(); // Update the auto crafter crafter display
+    // In your game loop callback
+    updateAutoCrafterCrafterCrafterDisplay(); // Update the AutoCrafter-Crafter-Crafter display
+    updatePointsDisplay(); // Update points display
+  });
+
   // Display for auto crafters
   const autoCrafterDisplay = document.getElementById("auto-crafter-count");
 
   // Update auto crafter display function
   const updateAutoCrafterDisplay = () => {
-    autoCrafterDisplay.textContent = `Auto Crafters: ${autoCrafters}`;
+    autoCrafterDisplay.textContent = `Auto Crafters: ${gameState.autoCrafters}`;
+  };
+
+  // Update function for auto-crafter-crafter display
+  const updateAutoCrafterCrafterDisplay = () => {
+    const autoCrafterCrafterDisplay = document.getElementById(
+      "auto-crafter-crafter-count"
+    );
+    autoCrafterCrafterDisplay.textContent = `Auto-Crafter-Crafters: ${gameState.autoCrafterCrafters}`;
+  };
+
+  const updateAutoCrafterCrafterCrafterDisplay = () => {
+    const autoCrafterCrafterCrafterDisplay = document.getElementById(
+      "auto-crafter-crafter-crafter-count"
+    );
+    autoCrafterCrafterCrafterDisplay.textContent = `AutoCrafter-Crafter-Crafters: ${gameState.autoCrafterCrafterCrafters}`;
   };
 
   const punishmentDisplay = document.getElementById("punishment-display");
 
-  const gameLoop = new GameLoop();
-  gameLoop.start(200); // 1 second interval
-
   let doublePointsActive = false;
 
-  let points = 0; // Shared points variable
-  let autoCrafters = 0; // Example of a shared variable for making something in game automatically
+  //  let points = 0; // Shared points variable
+  // let autoCrafters = 0; // Example of a shared variable for making something in game automatically
 
   const pointsDisplay = document.getElementById("points-display"); // Display for points
 
-  // Function to modify points
+  // Function to modify points (how to do it without a gameState object)
+  //const modifyPoints = (amount) => {
+  // if (doublePointsActive) {
+  //   points += amount * 2;
+  // } else {
+  //  points += amount;
+  // }
+  // };
+
+  // Function to modify points (how to do it with a gameState object)
   const modifyPoints = (amount) => {
-    if (doublePointsActive) {
-      points += amount * 2;
+    if (gameState.doublePointsActive) {
+      gameState.points += amount * 2;
     } else {
-      points += amount;
+      gameState.points += amount;
     }
   };
 
   // Function to update the display, called by the game loop
   const updatePointsDisplay = () => {
-    pointsDisplay.textContent = `Points: ${points}`;
+    pointsDisplay.textContent = `Points: ${gameState.points}`;
   };
 
   // Register the update callback in the game loop
@@ -73,15 +128,17 @@ document.addEventListener("DOMContentLoaded", () => {
   pointReward.addPrecondition(createFixedIntervalPrecondition(5000)); // Every 5 seconds
 
   // Create an auto-crafter purchase action
+  // Purchase Auto Crafter Action
   class PurchaseAutoCrafterAction {
     constructor(cost) {
       this.cost = cost;
     }
     execute() {
-      if (points >= this.cost) {
-        points -= this.cost;
-        autoCrafters++;
+      if (gameState.points >= this.cost) {
+        gameState.points -= this.cost;
+        gameState.autoCrafters++;
         console.log("Auto-crafter purchased!");
+        updateAutoCrafterDisplay(); // Update the display
       } else {
         console.log("Not enough points to purchase auto-crafter.");
       }
@@ -110,11 +167,15 @@ document.addEventListener("DOMContentLoaded", () => {
     execute(deltaTime) {
       this.elapsedTime += deltaTime;
       if (this.elapsedTime >= 1000) {
-        // Check if 1 second has passed
         this.elapsedTime = 0;
-        if (autoCrafters > 0) {
-          points += autoCrafters; // Gain points per auto-crafter
-          console.log("Auto-crafters generated points!");
+        if (gameState.autoCrafters > 0) {
+          const efficiency = gameState.autoCrafterEfficiency || 1;
+          gameState.points += gameState.autoCrafters * efficiency;
+          console.log(
+            `Auto-crafters generated ${
+              gameState.autoCrafters * efficiency
+            } points!`
+          );
         }
       }
     }
@@ -122,14 +183,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Instantiate auto-crafting action
   const autoCraftAction = new AutoCraftAction();
-
-  // Register auto-crafting in the game loop
-  gameLoop.registerUpdateCallback(() => {
-    const deltaTime = 200; // 200 milliseconds per game loop tick
-    autoCraftAction.execute(deltaTime);
-    updateAutoCrafterDisplay(); // Update the auto crafter display
-    updatePointsDisplay(); // Update points display
-  });
 
   // Fixed Ratio
   const fixedRatioReward = new Reward(10, () => {
@@ -203,7 +256,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const thresholdCheck = () => {
-    const isThresholdExceeded = points > 50;
+    const isThresholdExceeded = gameState.points > 50;
     return isThresholdExceeded;
   };
 
@@ -329,6 +382,193 @@ document.addEventListener("DOMContentLoaded", () => {
       const newDoublePoints = new DoublePointsModifier(10000); // 10 seconds
       modifierComposite.addModifier(newDoublePoints);
     });
+
+  // Create an Upgrade Modifier
+  class EfficiencyUpgradeModifier {
+    constructor() {
+      this.efficiencyMultiplier = 2; // Example: doubles the efficiency
+    }
+
+    update(deltaTime) {
+      // Update logic, if necessary
+    }
+
+    shouldApply() {
+      return true; // Always apply this modifier
+    }
+
+    apply() {
+      gameState.autoCrafterEfficiency = this.efficiencyMultiplier;
+    }
+
+    cleanup() {
+      // Cleanup logic, if necessary
+    }
+  }
+
+  // Define a Purchase Upgrade Action
+  class PurchaseUpgradeAction {
+    constructor(cost, modifier) {
+      this.cost = cost;
+      this.modifier = modifier;
+    }
+
+    execute() {
+      if (gameState.points >= this.cost) {
+        gameState.points -= this.cost;
+        gameModifierComposite.addModifier(new this.modifier());
+        console.log("Upgrade purchased!");
+      } else {
+        console.log("Not enough points for this upgrade.");
+      }
+    }
+  }
+
+  // Instantiate the GameModifierComposite
+  const gameModifierComposite = new GameModifierComposite();
+
+  // Instantiate a purchase upgrade action
+  const purchaseEfficiencyUpgrade = new PurchaseUpgradeAction(
+    100,
+    EfficiencyUpgradeModifier
+  );
+
+  // Add button event listener for purchasing the upgrade
+  document
+    .getElementById("purchase-efficiency-upgrade-btn")
+    .addEventListener("click", () => {
+      purchaseEfficiencyUpgrade.execute();
+    });
+
+  // Add the upgrade modifier update to the game loop
+  gameLoop.registerUpdateCallback((deltaTime) => {
+    gameModifierComposite.update(deltaTime);
+    // Other update callbacks...
+  });
+
+  // Auto-Crafter-Crafter Action
+  class AutoCrafterCrafterAction {
+    constructor() {
+      this.elapsedTime = 0;
+      this.interval = 10000; // 10 seconds interval
+    }
+
+    execute(deltaTime) {
+      this.elapsedTime += deltaTime;
+      if (this.elapsedTime >= this.interval) {
+        this.elapsedTime = 0;
+        gameState.autoCrafters++; // Increment auto-crafters
+        console.log("An auto-crafter has been crafted!");
+        updateAutoCrafterDisplay();
+      }
+    }
+  }
+
+  // Purchase Auto-Crafter-Crafter Action
+  class PurchaseAutoCrafterCrafterAction {
+    constructor(cost) {
+      this.cost = cost;
+    }
+
+    execute() {
+      if (gameState.points >= this.cost) {
+        gameState.points -= this.cost;
+        gameState.autoCrafterCrafters++; // Increment the auto-crafter-crafters count
+        const autoCrafterCrafter = new AutoCrafterCrafterAction();
+        gameState.autoCrafterCrafterActions.push(autoCrafterCrafter); // Add to the gameState array
+        updateAutoCrafterCrafterDisplay(); // Update the auto-crafter-crafter display
+        console.log("Auto-crafter-crafter purchased!");
+      } else {
+        console.log("Not enough points to purchase an auto-crafter-crafter.");
+      }
+    }
+  }
+
+  // Instantiate and add event listener for purchasing the auto-crafter-crafter
+  const purchaseAutoCrafterCrafter = new PurchaseAutoCrafterCrafterAction(500); // Example cost
+  document
+    .getElementById("purchase-auto-crafter-crafter-btn")
+    .addEventListener("click", () => {
+      purchaseAutoCrafterCrafter.execute();
+    });
+
+  class DeductPointsAction {
+    constructor(amount) {
+      this.amount = amount;
+    }
+    execute() {
+      if (gameState.points >= this.amount) {
+        gameState.points -= this.amount;
+      } else {
+        throw new Error("Not enough points");
+      }
+    }
+  }
+
+  class DeductAutoCraftersAction {
+    constructor(amount) {
+      this.amount = amount;
+    }
+    execute() {
+      if (gameState.autoCrafters >= this.amount) {
+        gameState.autoCrafters -= this.amount;
+      } else {
+        throw new Error("Not enough auto-crafters");
+      }
+    }
+  }
+
+  class PurchaseAutoCrafterCrafterCrafterAction {
+    constructor(pointsCost, autoCraftersCost) {
+      this.pointsCost = pointsCost;
+      this.autoCraftersCost = autoCraftersCost;
+      this.compositeAction = new GameActionComposite();
+      this.compositeAction.add(new DeductPointsAction(pointsCost));
+      this.compositeAction.add(new DeductAutoCraftersAction(autoCraftersCost));
+    }
+
+    execute() {
+      try {
+        this.compositeAction.execute();
+        const newAction = new AutoCrafterCrafterCrafterAction();
+        gameState.autoCrafterCrafterCrafters++;
+        gameState.autoCrafterCrafterCrafterActions.push(newAction);
+        updateAutoCrafterCrafterCrafterDisplay();
+        console.log("AutoCrafter-Crafter-Crafter purchased!");
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+  }
+
+  // Instantiate and add event listener for purchasing the AutoCrafter-Crafter-Crafter
+  const purchaseAutoCrafterCrafterCrafter =
+    new PurchaseAutoCrafterCrafterCrafterAction(1000, 50); // Example cost
+  document
+    .getElementById("purchase-auto-crafter-crafter-crafter-btn")
+    .addEventListener("click", () => {
+      purchaseAutoCrafterCrafterCrafter.execute();
+      updateAutoCrafterDisplay(); // Update displays if needed
+      updatePointsDisplay();
+    });
+
+  class AutoCrafterCrafterCrafterAction {
+    constructor() {
+      this.elapsedTime = 0;
+      this.interval = 30000; // Example: 30 seconds interval
+    }
+
+    execute(deltaTime) {
+      this.elapsedTime += deltaTime;
+      if (this.elapsedTime >= this.interval) {
+        this.elapsedTime = 0;
+        // Example logic: Creates an AutoCrafter-Crafter
+        gameState.autoCrafterCrafters++;
+        console.log("An AutoCrafter-Crafter-Crafter has been crafted!");
+        updateAutoCrafterCrafterDisplay();
+      }
+    }
+  }
 
   // Initialize points display
   modifyPoints(0);
