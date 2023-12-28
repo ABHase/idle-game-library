@@ -1,19 +1,19 @@
-import { GameLoop } from "./dist/GameLoop.js";
-import { Reward } from "./dist/Reward.js";
+import { GameLoop } from "../dist/GameLoop.js";
+import { Reward } from "../dist/Reward.js";
 import {
   createFixedRatioPrecondition,
   createFixedIntervalPrecondition,
   createVariableIntervalPrecondition,
   createVariableRatioPrecondition,
-} from "./dist/RewardPrecondition.js";
+} from "../dist/RewardPrecondition.js";
 
-import { Punishment } from "./dist/Punishment.js";
+import { Punishment } from "../dist/Punishment.js";
 
-import { createThresholdPunishmentPrecondition } from "./dist/PunishmentPrecondition.js";
+import { createThresholdPunishmentPrecondition } from "../dist/PunishmentPrecondition.js";
 
-import { GameActionComposite } from "./dist/GameActionsComposite.js";
+import { GameActionComposite } from "../dist/GameActionsComposite.js";
 
-import { GameModifierComposite } from "./dist/GameModifierComposite.js";
+import { GameModifierComposite } from "../dist/GameModifierComposite.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const fixedRatioDisplay = document.getElementById("fixed-ratio-display");
